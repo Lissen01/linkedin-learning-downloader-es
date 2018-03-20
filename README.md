@@ -4,37 +4,37 @@
 [![built with Requests](https://img.shields.io/badge/built%20with-Requests-yellow.svg?style=flat-square)](http://docs.python-requests.org)
 [![built with Python2.7](https://img.shields.io/badge/built%20with-Python2.7-red.svg?style=flat-square)](https://www.python.org/)
 
-### A scraping tool that downloads video lessons from Linkedin Learning
-Implemented in python using requests
+### Una pequeña herramienta que descarga los cursos de Linkedin Learning
+Implementado en python usando requests
 
-### How to use
-First install the requirements:
+### Modo de uso
+Primero instala los requerimientos:
 ```
 pip install -r requirements.txt
 ```
-In the `config.py` file, write your login info, download path and fill the `COURSES` array with the slug of the the courses you want to download, for example:
+En el archivo `config.py`, escribe tus datos de inicio de sesión, la ruta de descarga y llena la ficha de `COURSES` con el registro de los cursos que deseas descargar, por ejemplo:
 
-`https://www.linkedin.com/learning/it-security-foundations-core-concepts/ -> it-security-foundations-core-concepts`
+`https://www.linkedin.com/learning/fundamentos-esenciales-de-la-programacion/ -> fundamentos-esenciales-de-la-programacion`
 
 ```
 USERNAME = 'user@email.com'
 PASSWORD = 'password'
-BASE_DOWNLOAD_PATH = 'E:/Downloads/LinkedInLearning' #use "/" as separators
+BASE_DOWNLOAD_PATH = 'E:/Downloads/LinkedInLearning' #usa "/" como separador
 
 COURSES = [
-    'it-security-foundations-core-concepts',
-    'javascript-for-web-designers-2'
+    'fundamentos-esenciales-de-la-programacion',
+    'premiere-pro-cc-2017-esencial'
 ]
 ```
-Then execute the script:
+Luego ejecuta el script:
 ```
 python lld.py
 ```
-The courses will be saved in your defined download folder.
+Los cursos se guardarán en la carpeta de descargas que hayas definido.
 
-### Demo (Outdated by now)
+### Demo (Desactualizado por ahora)
 [![asciicast](https://asciinema.org/a/143894.png)](https://asciinema.org/a/143894)
 
 ---
-###### Have Fun & Feel Free to report any issues
+###### Que los disfrutes y sientete libre de reportar cualquier problema.
 ---
