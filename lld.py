@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: cp1252 -*-
 import cookielib
 import os
 import urllib
@@ -11,7 +11,7 @@ import time
 from bs4 import BeautifulSoup
 
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding('cp1252')
 
 
 def login():
@@ -47,12 +47,12 @@ def authenticate():
     try:
         session = login()
         if len(session) == 0:
-            sys.exit('[!] Unable to login to LinkedIn.com')
-        print ('[*] Obtained new session: %s' % session)
+            sys.exit('[!] Incapaz de iniciar sesión en LinkedIn.com')
+        print ('[*] Ontenida nueva sesión: %s' % session)
         cookies = dict(li_at=session)
     except Exception as e:
         print(e)
-        sys.exit('[!] Could not authenticate to linkedin. %s' % e)
+        sys.exit('[!] No se pudo autenticar en LinkedIn: %s' % e)
     return cookies
 
 
@@ -60,7 +60,7 @@ def load_page(opener, url, data=None):
     try:
         response = opener.open(url)
     except:
-        print ('[Fatal] Your IP may have been temporarily blocked')
+        print ('[Fatal] Tu IP puede que haya sido bloqueada temporalmente')
     try:
         if data is not None:
             response = opener.open(url, data)
@@ -68,7 +68,7 @@ def load_page(opener, url, data=None):
             response = opener.open(url)
         return ''.join(response.readlines())
     except:
-        print ('[Notice] Exception hit')
+        print ('[Aviso] Exception hit')
         sys.exit(0)
 
 def cleanup_string(string):
@@ -80,13 +80,13 @@ def cleanup_string(string):
                         u'ü': 'ue',
                         ':': ' -'                      
                         }
-    invalid_file_chars = r'[^A-Za-z0-9\-\.]+'
+    invalid_file_chars = r'[\\/*¿?:,"\'<>|]'
     
     #replace Umlaut first
-    umap = {ord(key):unicode(val) for key, val in replacementDictionary.items()}
-    string = string.translate(umap)
+    #umap = {ord(key):unicode(val) for key, val in replacementDictionary.items()}
+    #string = string.translate(umap)
     #then replace other forbidden chars
-    string = re.sub(invalid_file_chars, " ", string).strip().encode('utf-8')
+    string = re.sub(invalid_file_chars, " ", string).strip().encode('cp1252')
     return string    
     
 
@@ -102,7 +102,7 @@ def download_file(url, file_path, file_name):
                 if chunk:
                     f.write(chunk)    
     except:
-        print 'Error. Deleting last incomplete file. Also check last created file manually for integrity'
+        print 'Error. Eliminando último archivo incompleto. También verifique el último archivo creado manualmente por integridad'
         os.remove(file_path + '/' + file_name)     
 
                 
@@ -142,7 +142,7 @@ def download_subtitles(file_path, file_name):
         subtitle_file.close()
         
     except:
-        print 'Error. Deleting last incomplete file. Also check last created file manually for integrity'
+        print 'Error. Eliminando último archivo incompleto. También verifique el último archivo creado manualmente por integridad'
         os.remove(file_path + '/' + file_name)     
 
 def download_description(file_path, file_name, description, course_url):
@@ -156,7 +156,7 @@ def download_description(file_path, file_name, description, course_url):
         description_file.close()
         
     except:
-        print 'IO error. Deleting last incomplete file. Also check last created file manually for integrity'
+        print 'IO error. Error. Eliminando último archivo incompleto. También verifique el último archivo creado manualmente por integridad'
         os.remove(file_path + '/' + file_name)     
 
         
@@ -189,7 +189,7 @@ if __name__ == '__main__':
             course_description = r.json()['elements'][0]['description']
             fullCourseUnlocked = r.json()['elements'][0]['fullCourseUnlocked']
             course_releasedate_unix = r.json()['elements'][0]['releasedOn']
-            course_releasedate = time.strftime("%Y.%m", time.gmtime(course_releasedate_unix / 1000.0))
+            course_releasedate = time.strftime("%Y.%m.%d", time.gmtime(course_releasedate_unix / 1000.0))
                 #for future use: tag/name of updated-element unknown on LinkedIn Learning so far. If known, use the newer Update date for course-folder instead of old initial release date
                 #course_updatedate_unix = 
                 #course_updatedate_
@@ -233,7 +233,7 @@ if __name__ == '__main__':
                 videos = chapter['videos']
                 video_index = 0
                 chapter_index +=1
-                print ('[*] --- Parsing chapter #%s "%s" for videos') % (str(chapter_index), chapter_name)
+                print ('[*] --- Parsing chapter #%s "%s" for videos') % (str(chapter_index).zfill(2), chapter_name)
                 print ('[*] --- [%d videos found]' % len(videos))
                 #Videos
                 for video in videos:
@@ -251,9 +251,9 @@ if __name__ == '__main__':
                     except:
                         print ('[!] ------ Can\'t download the video "%s", probably is only for premium users. Check full access in browser' % video_name)
                     else:
-                        file_path = course_folder_path + '/' + '%s - %s' % (str(chapter_index),chapter_name)
-                        file_name = '%s - %s' % (str(video_index), video_name)                    
-                        print ('[*] ------ Downloading video #%s "%s"' % (str(video_index), video_name))
+                        file_path = course_folder_path + '/' + '%s. %s' % (str(chapter_index).zfill(2),chapter_name)
+                        file_name = '%s. %s' % (str(video_index).zfill(2), video_name)                    
+                        print ('[*] ------ Downloading video #%s "%s"' % (str(video_index).zfill(2), video_name))
                         if os.path.exists(file_path + '/' + file_name + file_type_video):
                             print '[!]          ->video file already existing, now checking subtitle existence'                    
                         else:
@@ -271,4 +271,3 @@ if __name__ == '__main__':
                             download_subtitles(file_path, file_name + file_type_srt)
                     print("")
         print '[*] __________ Finished course "%s" __________' % course_title
-                    
